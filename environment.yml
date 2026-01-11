@@ -1,23 +1,21 @@
-name: rec_system
+name: ml_pytorch
 channels:
-  - conda-forge
   - defaults
+  - conda-forge
+  - pytorch
 dependencies:
-  - python=3.9
-  - numpy=1.23
-  - pandas=1.5
-  - matplotlib=3.7
-  - scipy=1.10
-  - scikit-learn=1.2
-  - seaborn=0.12
-  - tqdm=4.65
-  - ipykernel=6.22
-  - pyarrow=12.0
-  - jupyter
+  - python=3.10
+  - numpy
+  - pandas
+  - matplotlib
+  - seaborn
+  - scikit-learn
+  - scikit-surprise
+  - pytorch=2.1.*         
+  - ipython
   - notebook
-  - ipywidgets
-  - pip
-  - pip:
-    - scikit-surprise==1.1.3
-
-    
+  - ipykernel
+  - widgetsnbextension
+  - bar_chart_race        
+  - wordcloud             
+  - pip                   
