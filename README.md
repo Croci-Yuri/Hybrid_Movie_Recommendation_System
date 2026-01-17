@@ -1,34 +1,67 @@
-## 📘 Project Overview: Movie Recommendation System 📘
+# Movie Recommendation System
 
-This project explores graph based recommendation models using the [MovieLens 20M dataset](https://www.kaggle.com/datasets/grouplens/movielens-20m-dataset). Starting from a classic item based KNN as a baseline, it progressively introduces more advanced models such as LightGCN and Graph Convolutional Networks to improve movie recommendations through graph representation learning.
+Exploration and evaluation of recommendation algorithms on the [MovieLens 1M dataset](https://grouplens.org/datasets/movielens).
 
-🎯 The goal is to leverage all available information in the dataset, including user ratings, movie genres, tag relevance scores, and user–movie interaction structure, to build more accurate and personalized recommendations.
 
-⚙️ The preprocessing phase is handled using SQL queries in DuckDB for efficient filtering over the large relational dataset, followed by data transformation and preparation in Pandas.
 
-💻 Modeling is implemented with PyTorch for graph based architectures, while the simple KNN baseline is built using the scikit-learn library.
+📄**[Project Report](reports/Movie_Recommendation_Report.pdf)**
 
-📊 Each step of the project is available and documented through Jupyter notebooks and a structured Python pipeline, providing clear justifications, transparency, and evaluation results for the audience.
+![Python](https://img.shields.io/badge/Python-3776AB?style=flat&logo=python&logoColor=white)
+![PyTorch](https://img.shields.io/badge/PyTorch-EE4C2C?style=flat&logo=pytorch&logoColor=white)
+![scikit-learn](https://img.shields.io/badge/scikit--learn-F7931E?style=flat&logo=scikit-learn&logoColor=white)
+![NumPy](https://img.shields.io/badge/NumPy-013243?style=flat&logo=numpy&logoColor=white)
+![Pandas](https://img.shields.io/badge/Pandas-150458?style=flat&logo=pandas&logoColor=white)
+
+## Overview
+
+As data tracking increases, recommendation systems have become a huge part of our digital lives. Every day, platforms like Netflix, Spotify, and Amazon recommend content tailored to our preferences and activity. While these systems work silently under users' notice, their construction and learning processes reveal distinct behaviors and limitations depending on the recommendation target and available data. To understand these trade-offs, this project systematically explains and compares four foundational approaches to recommendation prediction.
+
+This project uses the MovieLens 1M dataset, a well-known benchmark containing over 850,000 ratings from roughly 6,000 users across 6,500 distinct movies, along with metadata including genres and user-generated tags. After exploratory analysis and data cleaning, I systematically evaluated content-based filtering, memory-based collaborative filtering, and model-based matrix factorization. By analyzing the strengths and weaknesses of each approach, I then designed a hybrid neural network that addresses their individual limitations and leverages the complementary information available in the dataset.
+
+The evaluation process follows a realistic scenario where each user's most recent ratings are predicted, simulating real-world deployment. Models were optimized through hyperparameter tuning on a validation set and rigorously evaluated on a held-out test set. Additionally, test performance was measured separately for warm-start movies (frequently rated) and cold-start movies (rarely rated), revealing how each algorithm handles varying levels of data availability.
+
+
+## Hybrid Model Architecture 
+
+As the main contribution of this comparative study, I designed a hybrid neural network that refines predictions from pre-trained Funk SVD by integrating content features. Rather than training embeddings from scratch or using a simple weighted combination, the model leverages the high-quality representations already learned by Funk SVD, which performed best among baselines. The frozen embeddings and bias terms are combined with engineered content features (one-hot encoded genres, PCA-reduced tag scores, movie metadata, etc.) and fed into a feedforward network that learns non-linear refinements to the traditional dot product. This approach maintains the strength of collaborative filtering on popular items while incorporating content signals to address cold-start scenarios where interaction data is sparse.
+
+<br>
+<p align="center">
+  <img src="notebooks/images/Hybrid_NN_diagram.png" width="500">
+</p>
+
+
+
+## Key Findings
+
+The systematic comparison reveals distinct strengths and trade-offs across recommendation approaches. Content-based filtering proved quick and efficient, handling cold items reasonably well by relying on movie features rather than interaction history. In contrast, memory-based collaborative filtering achieved moderate accuracy but faced computational scalability challenges due to the large similarity matrices required. Funk SVD emerged as the strongest baseline, offering better scalability and improved performance across all metrics through efficient matrix factorization. Building upon this foundation, the hybrid neural network integrated content features with pre-trained Funk SVD embeddings to achieve the best overall test RMSE of 0.8317. Most notably, the hybrid approach reduced cold-start error by approximately 2.5% compared to Funk SVD alone, demonstrating how content signals can refine collaborative predictions when collaborative signals are weak.
 
 <br>
 
-## 🗂️ Repository Structure  🗂️
+<p align="center">
+<img src="notebooks/images/model_performance_comparison.png" width="600">
+</p>
+
+
+## Repository Structure
 
 ```
 movie-recommendation-system/
-│
-├── modules/                      # Python modules for modeling and utilities
-│   ├── data_analysis.py          # Bascic modules for data wrapping and EDA
-│
-├── notebooks/                    # Jupyter notebooks for data analysis and modeling
-│   ├── data_cleaning.ipynb       # Data loading, schema checks, and cleaning
-│   ├── eda_fe.ipynb              # Exploratory Data Analysis and feature engineering
-│   └── mem_collab_filtering.ipynb # Memory-based collaborative filtering (item-item and user-user)
-│
-├── .gitignore                    # Ignore rules for Git
-├── LICENSE                       # Project license (MIT)
-├── README.md                     # Project overview and instructions
+├── data/
+│   ├── processed/               # Cleaned and preprocessed datasets
+│   └── raw/                     # Original MovieLens 1M data
+|
+├── modules/                     # Core Python modules for data processing and modeling
+│   ├── data_analysis.py         
+│   ├── data_cleaning.py         
+│   └── hybrid_NN.py
+|             
+├── notebooks/                   # Detailed exploration, implementation, and evaluation
+├── reports/                     # Project report
+|
+└── environment.yml              # Conda environment for reproducibility
 ```
 
+## License
 
-
+MIT License
