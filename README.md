@@ -1,6 +1,6 @@
 # Movie Recommendation System
 
-Exploration and evaluation of recommendation algorithms on the [MovieLens 1M dataset](https://grouplens.org/datasets/movielens).
+Exploration and evaluation of recommendation algorithms on the [MovieLens 20M dataset]([https://grouplens.org/datasets/movielens](https://grouplens.org/datasets/movielens/20m/)).
 
 
 
@@ -16,20 +16,24 @@ Exploration and evaluation of recommendation algorithms on the [MovieLens 1M dat
 
 As data tracking increases, recommendation systems have become a huge part of our digital lives. Every day, platforms like Netflix, Spotify, and Amazon recommend content tailored to our preferences and activity. While these systems work silently under users' notice, their construction and learning processes reveal distinct behaviors and limitations depending on the recommendation target and available data. To understand these trade-offs, this project systematically explains and compares four foundational approaches to recommendation prediction.
 
-This project uses the MovieLens 1M dataset, a well-known benchmark containing over 850,000 ratings from roughly 6,000 users across 6,500 distinct movies, along with metadata including genres and user-generated tags. After exploratory analysis and data cleaning, I systematically evaluated content-based filtering, memory-based collaborative filtering, and model-based matrix factorization. By analyzing the strengths and weaknesses of each approach, I then designed a hybrid neural network that addresses their individual limitations and leverages the complementary information available in the dataset.
+This project uses a subset of the MovieLens 20M dataset, resulting in over 850,000 ratings from roughly 6,000 users across 6,500 movies, along with metadata including genres and user-generated tags. After exploratory analysis and data cleaning, I systematically evaluated content-based filtering, memory-based collaborative filtering, and model-based matrix factorization. By analyzing the strengths and weaknesses of each approach, I then designed a hybrid neural network that addresses their individual limitations and leverages the complementary information available in the dataset.
 
 The evaluation process follows a realistic scenario where each user's most recent ratings are predicted, simulating real-world deployment. Models were optimized through hyperparameter tuning on a validation set and rigorously evaluated on a held-out test set. Additionally, test performance was measured separately for warm-start movies (frequently rated) and cold-start movies (rarely rated), revealing how each algorithm handles varying levels of data availability.
 
 
 ## Hybrid Model Architecture 
 
-As the main contribution of this comparative study, I designed a hybrid neural network that refines predictions from pre-trained Funk SVD by integrating content features. Rather than training embeddings from scratch or using a simple weighted combination, the model leverages the high-quality representations already learned by Funk SVD, which performed best among baselines. The frozen embeddings and bias terms are combined with engineered content features (one-hot encoded genres, PCA-reduced tag scores, movie metadata, etc.) and fed into a feedforward network that learns non-linear refinements to the traditional dot product. This approach maintains the strength of collaborative filtering on popular items while incorporating content signals to address cold-start scenarios where interaction data is sparse.
+As the main contribution of this comparative study, I designed a hybrid neural network that refines predictions from pre-trained Funk SVD by integrating content features. Rather than training embeddings from scratch or using a simple weighted combination, the model leverages the high-quality representations learned by Funk SVD, which performed best among baselines. The pre-trained user and item embeddings are combined with engineered content features (one-hot encoded genres, PCA-reduced tag scores, movie metadata, etc.) and fed into a feedforward network that learns non-linear refinements to the standard dot-product prediction. The network output is then combined with pre-trained global mean and user/item bias terms to form the final rating prediction. This approach maintains the strength of collaborative filtering on popular items while incorporating content signals to address cold-start scenarios where interaction data is sparse.
 
 <br>
+
 <p align="center">
   <img src="notebooks/images/Hybrid_NN_diagram.png" width="500">
+  <br>
+  <span style="font-size: 0.9em; font-style: italic;">
+    Hybrid model architecture used to predict the rating $\hat r_{u,i}$ for user $u$ and movie $i$.
+  </span>
 </p>
-
 
 
 ## Key Findings
