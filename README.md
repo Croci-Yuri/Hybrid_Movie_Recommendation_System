@@ -23,13 +23,17 @@ The evaluation process follows a realistic scenario where each user's most recen
 
 ## Hybrid Model Architecture 
 
-As the main contribution of this comparative study, I designed a hybrid neural network that refines predictions from pre-trained Funk SVD by integrating content features. Rather than training embeddings from scratch or using a simple weighted combination, the model leverages the high-quality representations already learned by Funk SVD, which performed best among baselines. The frozen embeddings and bias terms are combined with engineered content features (one-hot encoded genres, PCA-reduced tag scores, movie metadata, etc.) and fed into a feedforward network that learns non-linear refinements to the traditional dot product. This approach maintains the strength of collaborative filtering on popular items while incorporating content signals to address cold-start scenarios where interaction data is sparse.
+As the main contribution of this comparative study, I designed a hybrid neural network that refines predictions from pre-trained Funk SVD by integrating content features. Rather than training embeddings from scratch or using a simple weighted combination, the model leverages the high-quality representations learned by Funk SVD, which performed best among baselines. The pre-trained user and item embeddings are combined with engineered content features (one-hot encoded genres, PCA-reduced tag scores, movie metadata, etc.) and fed into a feedforward network that learns non-linear refinements to the standard dot-product prediction. The network output is then combined with pre-trained global mean and user/item bias terms to form the final rating prediction. This approach maintains the strength of collaborative filtering on popular items while incorporating content signals to address cold-start scenarios where interaction data is sparse.
 
 <br>
+
 <p align="center">
   <img src="notebooks/images/Hybrid_NN_diagram.png" width="500">
+  <br>
+  <span style="font-size: 0.9em; font-style: italic;">
+    Hybrid model architecture used to predict the rating $\hat r_{u,i}$ for user $u$ and movie $i$.
+  </span>
 </p>
-
 
 
 ## Key Findings
