@@ -65,7 +65,3 @@ movie-recommendation-system/
 |
 └── environment.yml              # Conda environment for reproducibility
 ```
-
-## License
-
-MIT License
