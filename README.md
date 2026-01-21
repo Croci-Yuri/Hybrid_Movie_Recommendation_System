@@ -52,7 +52,7 @@ The systematic comparison reveals distinct strengths and trade-offs across recom
 movie-recommendation-system/
 ├── data/
 │   ├── processed/               # Cleaned and preprocessed datasets
-│   └── raw/                     # Original MovieLens 1M data
+│   └── raw/                     # Original MovieLens 20M data
 |
 ├── modules/                     # Core Python modules for data processing and modeling
 │   ├── data_analysis.py         
